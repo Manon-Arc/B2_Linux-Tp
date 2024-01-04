@@ -209,6 +209,13 @@ $ openssl x509 -req -in www.supersite.com.csr -CA CA.pem -CAkey CA.key -CAcreate
 $ ls
 # www.supersite.com.crt c'est le certificat qu'utilisera le serveur web
 ```
+```bash
+Manon@HP-ProBook-450 MINGW64 ~/Documents/B2_info/linux/B2_TP-Linux/TP2/php/cert
+$ ls
+CA.key  CA.srl                 pma.supersite.com.key  www.supersite.com.crt  www.supersite.com.key
+CA.pem  pma.supersite.com.csr  v3.ext                 www.supersite.com.csr
+
+```
 
 🌞 **Ajustez la configuration NGINX**
 
