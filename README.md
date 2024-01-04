@@ -10,4 +10,4 @@
 - [compte rendu](./Dev/tp2_linux.md)
 
 ### [Admin](./Admin)
-- [compte rendu](./Admin/tp2_linux.md)
+- [compte rendu TP2](./Admin/TP2/tp2_linux.md)
