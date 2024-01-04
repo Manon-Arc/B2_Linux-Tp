@@ -21,7 +21,7 @@ services:
         volumes:
             - dbdata:/var/lib/mysql
             - ./sql/seed.sql:/docker-entrypoint-initdb.d/seed.sql
-           
+
     phpmyadmin:
         image: phpmyadmin:latest
         container_name: phpmyadmin
@@ -38,6 +38,10 @@ services:
             - "80:80"
         volumes:
             - ./conf/nginx.conf:/etc/nginx/conf.d/reverse.conf
+            - ./cert/www.supersite.com.crt:/etc/nginx/ssl/www.supersite.com.crt
+            - ./cert/www.supersite.com.key:/etc/nginx/ssl/www.supersite.com.key
+            - ./cert/pma.supersite.com.crt:/etc/nginx/ssl/pma.supersite.com.crt
+            - ./cert/pma.supersite.com.key:/etc/nginx/ssl/pma.supersite.com.key
         depends_on:
             - php
             - phpmyadmin
