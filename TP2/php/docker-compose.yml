@@ -36,6 +36,7 @@ services:
         container_name: nginx
         ports:
             - "80:80"
+            - "443:443"
         volumes:
             - ./conf/nginx.conf:/etc/nginx/conf.d/reverse.conf
             - ./cert/www.supersite.com.crt:/etc/nginx/ssl/www.supersite.com.crt
