@@ -2,28 +2,31 @@
 # vi: set ft=ruby :
 
 vms = [
-  { name: "node4.tp3.b2", ip: "10.3.1.11" },
-  { name: "node2.tp3.b2", ip: "10.3.1.12" },
-  { name: "node3.tp3.b2", ip: "10.3.1.13" }
+  { name: "alice.tp3.b2", ip: "10.3.1.11", ram: "1024", internet: "true"},
+  { name: "bob.tp3.b2", ip: "10.3.1.200", ram: "2048", internet: "true" },
+  { name: "eve.tp3.b2", ip: "10.3.1.57", ram: "1024", internet: "false"}
 ]
 
 Vagrant.configure("2") do |config|
   
-  config.vm.box = "../../super_box.box"
-  config.vm.provider "virtualbox" do |vb|
-    vb.memory = "1024"
-    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-  end
+  config.vm.box = "super_box"
 
   vms.each do |vm|
     config.vm.define vm[:name] do |node|
       node.vm.hostname = vm[:name]
-
-      # node.vm.network "private_network", name: "VirtualBox Host-Only Ethernet Adapter #4", type: "static", ip: vm[:ip] 
       node.vm.network "private_network", type: "static", ip: vm[:ip]
-      node.vm.network "forwarded_port", guest: 80, host: 8080, auto_correct: true
-      node.vm.network "forwarded_port", guest: 22, host: 2222, auto_correct: true
+      
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = vm[:ram]
+      end
+
+      if vm[:internet] == "true"
+        node.vm.provider "virtualbox" do |vb|
+          vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+          vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+        end
+      end
+
     end
   end
 end

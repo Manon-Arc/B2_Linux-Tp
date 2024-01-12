@@ -302,6 +302,15 @@ Pour cette partie, je vous laisse chercher des ressources sur Internet pour les 
 📁 **`partie1/Vagrantfile-3A`** dans le dépôt git de rendu
 [Vagrantfile](./partie1/Vagrantfile-3A/Vagrantfile)
 
+```bash
+PS C:\Users\Utilisateur\Documents\B2_info\linux\B2_TP-Linux\TP3\partie1\Vagrantfile-3A> vagrant status 
+Current machine states:
+
+node1.tp3.b2              running (virtualbox)
+node2.tp3.b2              running (virtualbox)
+node3.tp3.b2              running (virtualbox)
+```
+
 🌞 **Adaptez votre `Vagrantfile`** pour qu'il lance les VMs suivantes (en réutilisant votre box de la partie précédente)
 
 - l'idéal c'est de déclarer une liste en début de fichier qui contient les données des VMs et de faire un `for` sur cette liste
@@ -315,5 +324,14 @@ Pour cette partie, je vous laisse chercher des ressources sur Internet pour les 
 
 📁 **`partie1/Vagrantfile-3B`** dans le dépôt git de rendu
 [Vagrantfile](./partie1/Vagrantfile-3B/Vagrantfile)
+
+```bash
+PS C:\Users\Utilisateur\Documents\B2_info\linux\B2_TP-Linux\TP3\partie1\Vagrantfile-3B> vagrant status 
+Current machine states:
+
+alice.tp3.b2              running (virtualbox)
+bob.tp3.b2                running (virtualbox)
+eve.tp3.b2                running (virtualbox)
+```
 
 > *La syntaxe Ruby c'est vraiment dégueulasse.*
