@@ -6,6 +6,7 @@
 ### [TP2](./TP2)
 - [compte rendu partie commune](./TP2/tp2_commun.md)
 - [compte rendu partie admin](./TP2/tp2_linux.md)
+- [compte rendu partie dev](./TP2/tp2_dev.md)
 
 ### [TP3](./TP3)
 - [compte rendu](./TP3/tp3_linux.md)
