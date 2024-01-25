@@ -1,0 +1,12 @@
+version: '3'
+services:
+    calculette:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: MyCalc
+        ports:
+            - "13337:13337"
+        environment:
+            - CALC_PORT=13337
+        restart: on-failure
