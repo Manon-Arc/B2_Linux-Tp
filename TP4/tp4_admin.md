@@ -7,8 +7,6 @@ Cette deuxième partie a donc pour but de vous (re)montrer **des techniques d'ad
 - gestion du temps
 - je vous épargne la gestion de services cette fois hehe
 
-![Systemd breaks](./img/systemd.jpg)
-
 ## Sommaire
 
 - [TP4 : Vers une maîtrise des OS Linux](#tp4--vers-une-maîtrise-des-os-linux)
@@ -394,7 +392,37 @@ On va faire un petit exercice tout nul de gestion d'utilisateurs.
 | eve     | eve             | N/A                 | toto     | `/home/eve`     | `/bin/bash`        |
 | backup  | backup          | N/A                 | toto     | `/var/backup`   | `/usr/bin/nologin` |
 
+```bash
+sudo groupadd admins
+sudo groupadd alice
+sudo groupadd bob
+sudo groupadd charlie
+sudo groupadd eve
+sudo groupadd backup
+
+useradd -g alice -G admins -m -s /bin/bash alice 
+useradd -g bob -G admins -m -s /bin/bash bob 
+useradd -g charlie -G admins -m -s /bin/bash charlie 
+useradd -g eve -m -s /bin/bash eve 
+useradd -g backup -d /var/backup -s /bin/bash backup 
+
+sudo passwd alice
+sudo passwd bob
+sudo passwd charlie
+sudo passwd eve
+sudo passwd backup
+```
+
 - prouvez que tout ça est ok avec juste un `cat` du fichier adapté (y'a pas le password dedans bien sûr)
+
+```bash
+[manon@tp1 home]$ cat /etc/passwd
+alice:x:1001:1001::/home/alice:/bin/bash
+bob:x:1002:1003::/home/bob:/bin/bash
+charlie:x:1003:1004::/home/charlie:/bin/bash
+eve:x:1004:1005::/home/eve:/bin/bash
+backup:x:1005:1006::/var/backup:/bin/bash
+```
 
 🌞 **La conf `sudo` doit être la suivante**
 
@@ -402,6 +430,12 @@ On va faire un petit exercice tout nul de gestion d'utilisateurs.
 | ---------------- | ----------------------------------------------------------------- | ------------------------- |
 | Groupe admins    | Tous les droits                                                   | Non                       |
 | User eve         | Peut utiliser la commande `ls` en tant que l'utilisateur `backup` | Oui                       |
+
+```bash
+[manon@tp1 home]$ sudo cat /etc/sudoers | grep -e admin -e eve
+eve ALL=(backup) 	      /bin/ls
+%admins ALL=(ALL)       NOPASSWD: ALL
+```
 
 🌞 **Le dossier `/var/backup`**
 
@@ -415,19 +449,44 @@ On va faire un petit exercice tout nul de gestion d'utilisateurs.
     - `backup` doit être le seul à pouvoir le lire et le modifier
     - le groupe `backup` peut uniquement le lire
 
+```bash
+[manon@tp1 var]$ ls -la | grep backup
+drwx------.  2 backup backup  4096 Jan 26 11:09 backup
+
+[manon@tp1 var]$ sudo ls -la backup/ | grep precious_backup
+-rw-r-----.  1 backup backup    0 Jan 26 11:45 precious_backup
+
+```
+
 🌞 **Mots de passe des users, prouvez que**
 
 - ils sont hashés en SHA512 (c'est violent)
 - ils sont salés (c'est pas une blague si vous connaissez pas le terme, on dit "salted" en anglais aussi)
+
+```bash
+[manon@tp1 ~]$ sudo cat /etc/shadow
+manon:$6$cr/U5rl9co9MdTZB$VeKbryFGGyvvP5mM1VYFcp2B0ZCX.wtu6b8p8Vvk1b4N1jhpiSMS7fhPvylHzsYXz98g9.1f2vSEvV6iOJPOF.::0:99999:7:::
+alice:$6$rnrtp/jhyxtE09zv$LM2LJ.kEhxnMRbJIVCBHG/b26emJ9PoOO9V.G7Qbj62a6.1GwwBJ/4xgoquUD/ksF5l6qpSqfdz9XKRZSYVRF1:19748:0:99999:7:::
+bob:$6$4WKWOs8qhN00qhLh$2nPJELiGWOEhmOjkILHQIFU2yh664vZMsjQEqgoMHBACQLepOD9Gs0lyhCYYl4bp2RrDp8TKo784/Q3x41waw0:19748:0:99999:7:::
+charlie:$6$fHwdkBLukkp0UeHs$Q8OudGYgWB7TnF0hm7cqSe.uf9VG9AQ9.7xfwXJYCxFZErvn/teMcsE4Ga0jZZqASDSsaCcl.CpPkYsxFc27y1:19748:0:99999:7:::
+eve:$6$UJwdDX1pU5VCDfWr$QcZP4/KWyL4n5N7JvUh.U0NwrqKi7eRmzf7P2x8J/AQn6bNV8XQyQXfSLxjczgVT44nP.5FAfRbqXvEdmz.ja/:19748:0:99999:7:::
+backup:$6$fGjkZE1E3pU757na$8sak4Q3guslC3WW0AioHpcflteXzctbAzJgq87s3lNOsdvMM0xQfpgZaEpOCc2sA7hWxkYRBTV0cTaVE9kZKl/:19748:0:99999:7:::
+```
 
 🌞 **User eve**
 
 - elle ne peut que saisir `sudo ls` et rien d'autres avec `sudo`
 - vous pouvez faire `sudo -l` pour voir vos droits `sudo` actuels
 
-# III. Gestion du temps
+```bash
+[manon@tp1 ~]$ sudo cat /etc/sudoers | grep eve
+eve ALL=(ALL) 		/usr/bin/ls
 
-![Timing](./img/timing.jpg)
+[eve@tp1 manon]$ sudo -l | grep ls
+    (ALL) /usr/bin/ls
+```
+
+# III. Gestion du temps
 
 Il y a un service qui tourne en permanence (ou pas) sur les OS modernes pour maintenir l'heure de la machine synchronisée avec l'heure que met à disposition des serveurs.
 
@@ -443,3 +502,44 @@ Il existe des serveurs NTP publics, hébergés gracieusement, comme le projet [N
 - assurez-vous que vous êtes synchronisés sur l'heure de Paris
 
 > systemd fournit un outil en ligne de commande `timedatectl` qui permet de voir des infos liées à la gestion du temps
+
+```bash
+[manon@tp1 ~]$ systemctl list-units -t service -a | grep chrony
+  chronyd.service                            loaded    active   running NTP client/server
+
+[manon@tp1 etc]$ cat chrony.conf
+# /etc/chrony.conf
+server 0.fr.pool.ntp.org iburst
+server 1.fr.pool.ntp.org iburst
+server 2.fr.pool.ntp.org iburst
+server 3.fr.pool.ntp.org iburst
+driftfile /var/lib/chrony/drift
+makestep 1.0 3
+rtcsync
+logdir /var/log/chrony
+
+[manon@tp1 etc]$ sudo systemctl enable chronyd
+
+[manon@tp1 etc]$ sudo systemctl status chronyd
+● chronyd.service - NTP client/server
+     Loaded: loaded (/usr/lib/systemd/system/chronyd.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2024-01-26 10:36:45 CET; 1h 46min ago
+       Docs: man:chronyd(8)
+             man:chrony.conf(5)
+   Main PID: 773 (chronyd)
+      Tasks: 1 (limit: 11109)
+     Memory: 4.4M
+        CPU: 79ms
+     CGroup: /system.slice/chronyd.service
+             └─773 /usr/sbin/chronyd -F 2
+
+
+[manon@tp1 etc]$ timedatectl
+               Local time: Fri 2024-01-26 12:24:08 CET
+           Universal time: Fri 2024-01-26 11:24:08 UTC
+                 RTC time: Fri 2024-01-26 11:24:07
+                Time zone: Europe/Paris (CET, +0100)
+System clock synchronized: yes
+              NTP service: active
+          RTC in local TZ: no
+```
