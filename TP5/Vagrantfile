@@ -1,0 +1,33 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+vms = [
+  { name: "web1.tp5.b2", ip: "10.5.1.11", ram: "1024", internet: "true"},
+  { name: "rp1.tp5.b2", ip: "10.5.1.111", ram: "1024", internet: "true" },
+  { name: "db1.tp5.b2", ip: "10.5.1.211", ram: "1024", internet: "true"}
+]
+
+Vagrant.configure("2") do |config|
+  
+  config.vm.box = "generic/rocky9"
+  config.ssh.insert_key = false
+
+  vms.each do |vm|
+    config.vm.define vm[:name] do |node|
+      node.vm.hostname = vm[:name]
+      node.vm.network "private_network", type: "static", ip: vm[:ip]
+      
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = vm[:ram]
+      end
+
+      if vm[:internet] == "true"
+        node.vm.provider "virtualbox" do |vb|
+          vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+          vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+        end
+      end
+
+    end
+  end
+end
