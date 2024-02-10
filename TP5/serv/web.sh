@@ -3,18 +3,18 @@
 PROJECT_DIR="/var/serv"
 NEW_USER="web"
 
-sudo dnf install -y dnf-plugins-core
-sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
-sudo dnf install -y docker-ce docker-ce-cli containerd.io
+dnf install -y dnf-plugins-core
+dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+dnf install -y docker-ce docker-ce-cli containerd.io
 
-sudo systemctl start docker
-sudo systemctl enable docker
+systemctl start docker
+systemctl enable docker
 
-sudo useradd -m $NEW_USER
+useradd -m $NEW_USER
 
-sudo usermod -aG docker $NEW_USER
+usermod -aG docker $NEW_USER
 
-sudo tee /etc/systemd/system/serv.service > /dev/null <<EOF
+tee /etc/systemd/system/serv.service > /dev/null <<EOF
 [Unit]
 Description=Serv Start Service
 After=network.target
@@ -30,12 +30,12 @@ ExecStart=./compose.sh
 WantedBy=multi-user.target
 EOF
 
-sudo tee >compose.sh /dev/null <<EOF
+tee >compose.sh /dev/null <<EOF
 docker compose up -d
 EOF
 
 chown $NEW_USER:$NEW_USER ./compose.sh
 
-sudo systemctl daemon-reload
-sudo systemctl enable serv.service
-sudo systemctl start serv.service
+systemctl daemon-reload
+systemctl enable serv.service
+systemctl start serv.service
