@@ -1,8 +1,8 @@
 /*create the database*/
 
-USE meo;
+USE "app_nulle";
 
-CREATE TABLE meo
+CREATE TABLE IF NOT EXISTS meo
   (
      id    INT NOT NULL auto_increment,
      name  VARCHAR(255) NOT NULL,

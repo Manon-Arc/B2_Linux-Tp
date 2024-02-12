@@ -150,11 +150,19 @@ Un client pourra saisir le nom `http://app_nulle.tp5.b2` pour accéder à l'appl
 
 > *Je vous recommande de faire la conf à la main une première fois, avant de l'automatiser avec un script. Vagrant vous fournit un outil idéal pour détuire/refaire/retester sur une nouvelle VM.*
 
-
-
-```vagrant up
-vagrant ssh web1.tp5.b2
-cd /web/serv
+```
+vagrant up
+ssh vagrant web1.tp5.b2
+cd /var/serv
+chmod 744 web.ch
+sudo ./web.sh
+```
+```
+ssh vagrant db1.tp5.b2
+cd /var/db
+chmod 744 db.sh init.sql 
+sudo ./db.sh
+```
 
 
 - [**Partie 2 : Haute Disponibilité**](./ha.md)

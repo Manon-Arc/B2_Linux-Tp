@@ -9,11 +9,11 @@ Everything has been sent to database !  (maybe it will work, or maybe it will ex
 
 <?php
 
-$host = 'db'; $user = 'meo'; $password = 'dbc'; $db = 'meo';
+$host = '10.5.1.211'; $user = 'SQL'; $password = 'azerty'; $db = 'app_nulle';
 $conn = new mysqli($host,$user,$password,$db);
 if(!$conn) {echo "Erreur de connexion à MSSQL<br />";}
 
-$sql = 'INSERT INTO meo (name, email) VALUES (?, ?)';
+$sql = 'INSERT INTO app_nulle (name, email) VALUES (?, ?)';
 $conn->execute_query($sql, [$_POST["name"], $_POST["email"]]);
 mysqli_close($conn);
 
