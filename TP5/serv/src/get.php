@@ -7,7 +7,7 @@ $host = '10.5.1.211'; $user = 'SQL'; $password = 'azerty'; $db = 'app_nulle';
 $conn = new mysqli($host,$user,$password,$db);
 if(!$conn) {echo "Erreur de connexion à MSSQL<br />";}
 
-$sql = 'select * from app_nulle where name = ?';
+$sql = 'select * from meo where name = ?';
 $results = $conn->execute_query($sql, [$_POST["name"]]);
 mysqli_close($conn);
 

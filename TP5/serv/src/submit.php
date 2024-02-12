@@ -9,13 +9,18 @@ Everything has been sent to database !  (maybe it will work, or maybe it will ex
 
 <?php
 
-$host = '10.5.1.211'; $user = 'SQL'; $password = 'azerty'; $db = 'app_nulle';
-$conn = new mysqli($host,$user,$password,$db);
-if(!$conn) {echo "Erreur de connexion à MSSQL<br />";}
+$host = 'db1.tp5.b2'; $user = 'SQL'; $password = 'azerty'; $db = 'app_nulle';
 
-$sql = 'INSERT INTO app_nulle (name, email) VALUES (?, ?)';
-$conn->execute_query($sql, [$_POST["name"], $_POST["email"]]);
-mysqli_close($conn);
+$conn = new mysqli($host,$user,$password,$db);
+
+//if(!$conn) {echo "Erreur de connexion à MSSQL<br />";}
+
+$sql = $conn->prepare('INSERT INTO meo (name, email) VALUES (?, ?)');
+$sql->bind_param($_POST["name"], $_POST["email"]);
+$sql->execute();
+
+/*$conn->execute_query($sql, [$_POST["name"], $_POST["email"]]);
+mysqli_close($conn);*/
 
 ?>
 <br><br>
