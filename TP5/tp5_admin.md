@@ -163,6 +163,12 @@ cd /var/db
 chmod 744 db.sh init.sql 
 sudo ./db.sh
 ```
+```
+ssh vagrant rp1.tp5.b2
+cd /var/reverse_proxy
+chmod 744 rp.sh 
+sudo ./rp.sh
+```
 
 
 - [**Partie 2 : Haute Disponibilité**](./ha.md)

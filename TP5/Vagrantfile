@@ -34,6 +34,9 @@ Vagrant.configure("2") do |config|
       if vm[:name] == "db1.tp5.b2"
         node.vm.synced_folder "./db", "/var/db"
       end
+      if vm[:name] == "rp1.tp5.b2"
+        node.vm.synced_folder "./reverse_proxy", "/var/reverse_proxy"
+      end
     end
   end
 end
