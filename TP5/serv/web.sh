@@ -6,6 +6,9 @@ NEW_USER="web"
 echo "10.5.1.111 rp1.tp5.b2" | sudo tee -a /etc/hosts >/dev/null
 echo "10.5.1.211 db1.tp5.b2" | sudo tee -a /etc/hosts >/dev/null
 
+firewall-cmd --add-port=80/tcp --permanent
+firewall-cmd --reload
+
 dnf install -y dnf-plugins-core
 dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
 dnf install -y docker-ce docker-ce-cli containerd.io
